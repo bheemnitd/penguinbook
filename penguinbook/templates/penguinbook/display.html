@@ -1,0 +1,64 @@
+{% extends 'penguinbook/base.html' %}
+{% load static %}
+
+{% block display %}
+
+    <script>
+        const loadFile = function (event) {
+            const output = document.getElementById('profile_image');
+            output.src = URL.createObjectURL(event.target.files[0]);
+
+        };
+
+     function myFunction(val){
+        document.getElementById('demo').innerHTML = val
+        document.getElementById('.responsive').style.height = val
+    }
+    </script>
+<style>
+.responsive {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+</style>
+<div class="container">
+  <h2>Large Modal</h2>
+  <!-- Button to Open the Modal -->
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+    Open modal
+  </button>
+
+  <!-- The Modal -->
+  <div class="modal fade" id="myModal">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Modal Heading</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+            <input type="file" accept="image/*" onchange="loadFile(event)" id="file">
+            <img id="profile_image" class="responsive" alt="">
+        </div>
+
+        <!-- Modal footer -->
+        <div class="modal-footer">
+            <p id="demo"></p><br>
+
+            <input type="range" oninput = "myFunction(this.value)" min=200 max=1000 step=".1">
+
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}
+

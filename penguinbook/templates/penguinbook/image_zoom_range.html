@@ -1,0 +1,258 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>penguinbook</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+ <style>
+     #profileCover{
+
+         border: 1px solid #07738b;
+         overflow: hidden;
+     }
+</style>
+
+<script>
+    $(document).ready(function () {
+    console.log($( "#profileCover" ).width());
+    $("#profile_cover").html($("img")).attr("src",'test.png');
+    $("#profile_cover").html($("img")).attr("height",$('#profileCover').height()+100);
+    $("#profile_cover").html($("img")).attr("width",$('#profileCover').width()+100);
+
+        // add jQuery
+
+    // windows scroll is in use
+    $(window).scroll(function(){
+
+    //   store scrolling value in the variable
+
+      const scroll = $(window).scrollTop();
+
+    //  Manupulate Image
+
+      $("#profile_cover").html($("img")).attr($("src")).css({
+
+        height: (100 + scroll/5 ) + "%",
+
+      });
+
+    });
+
+
+    });
+</script>
+</head>
+<body>
+<div class="container-fluid">
+   <div class="row" style="min-height: 100%">
+        <div class="col-sm-2" style="background-color:#8b0260;min-height: 100%"></div>
+        <div class="col-sm-8" style="background-color:#35368b;width:80%;min-height: 100%">
+            <div class="col-sm-12" style="background-color:#8b0260;min-height: 10%"></div>
+
+            <div class="col-sm-12" style="height: 80%; width:100%;" id="profileCover">
+                <img src="#" id = "profile_cover" style="border: 1px solid #07738b;">
+            </div>
+
+            <div class="col-sm-12" style="background-color:#8b0260;min-height: 10%">
+                <input type="range" id="slider" class="custom-range" style="margin-top: 10px;">
+            </div>
+
+        </div>
+        <div class="col-sm-2" style="background-color:#8b0260;min-height: 100%">.col</div>
+   </div>
+  </div>
+</body>
+</html>
+{#     {% if profile_cover_obj.profile_cover %}#}
+{#                <img class="responsive" src="/penguinbook{{ profile_cover_obj.profile_cover.url }}"  alt="Cirque Terr" id="profile_cover">#}
+{#            {% else %}#}
+{#                <img class="responsive" src="{% static 'profile_cover.png' %}" alt="image removed" >#}
+{#            {% endif %}#}
+{##}
+{#        <form method = "post" enctype="multipart/form-data" class="timeline">#}
+{#            {% csrf_token %}#}
+{#            <div class="form-inline">#}
+{##}
+{#                <input type="file" name="{{ user_profile_form.profile_image.name }}" id="{{ user_profile_form.profile_image.label }}" style="display:none;"/>#}
+{#                <label for="{{ user_profile_form.profile_image.label }}" class="btn1 btn-outline-danger ml-4 mr-2">Change Profile</label>#}
+{##}
+{#                <input type="file" name="{{ user_profile_form.profile_cover.name }}" id="{{ user_profile_form.profile_cover.label }}" style="display:none;"/>#}
+{#                <label for="{{ user_profile_form.profile_cover.label }}" class="btn2 btn-outline-danger ml-4 mr-2">Change Cover</label>#}
+{##}
+{#                <button type="submit" class="btn btn-upload">Upload</button>#}
+{#            </div>#}
+{#        </form>#}
+{##}
+{#            <div class="card ">#}
+{##}
+{#            {% if profile_image_obj.profile_image %}#}
+{#                <img src="/penguinbook{{ profile_image_obj.profile_image.url }}" class="card-img-top">#}
+{#            {% else %}#}
+{#                <img  src="{% static 'profile_image_female.png' %}" class="card-img-top">#}
+{#            {% endif %}#}
+
+
+{#$("#uploadCover").click(function () {#}
+                {##}
+                {#    $("#uploadCoverSettings").modal('show');#}
+                {#});#}
+
+
+
+
+        {#        $image_crop = $('#image_demo').croppie({#}
+        {#            enableExif: true,#}
+        {#              viewport: {#}
+        {#               width:200,#}
+        {#              height:200,#}
+        {#              type:'square' //circle#}
+        {#            },#}
+        {#            boundary:{#}
+        {#              width:300,#}
+        {#              height:300#}
+        {#            }#}
+        {#          });#}
+        {##}
+        {#          $('#uploadCover').click('change', function(){#}
+        {#            var reader = new FileReader();#}
+        {#            console.log(reader);#}
+        {#            reader.onload = function (event) {#}
+        {#              $image_crop.croppie('bind', {#}
+        {#                url: event.target.result#}
+        {#              }).then(function(){#}
+        {#                console.log('jQuery bind complete');#}
+        {#              });#}
+        {#            }#}
+        {#            reader.readAsDataURL(this.files[0]);#}
+        {#            $('#image_demo').modal('show');#}
+        {#          });#}
+        {##}
+        {#          $('.crop_image').click(function(event){#}
+        {#            $image_crop.croppie('result', {#}
+        {#              type: 'canvas',#}
+        {#              size: 'viewport'#}
+        {#            }).then(function(response){#}
+        {#              $.ajax({#}
+        {#                url:"upload.php",#}
+        {#                type: "POST",#}
+        {#                data:{"image": response},#}
+        {#                success:function(data)#}
+        {#                {#}
+        {#                  $('#uploadimageModal').modal('hide');#}
+        {#                  $('#uploaded_image').html(data);#}
+        {#                }#}
+        {#              });#}
+        {#            })#}
+        {#          });#}
+        {##}
+        });
+
+function filePreview(input) {
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#dp').attr({
+                        src: e.target.result,
+                    });
+                };
+                reader.readAsDataURL(input.files[0]);
+                $("#uploadCoverSettings").modal('show');
+            }
+
+
+
+
+           // Jquery if resolution of image is less than dp(200X200).
+
+
+                   if ($("#dp").height() < 200 && $("#dp").width() <200) {
+
+            if( $("#dp").height()<$("#dp").width()) {
+
+                $("$dp").height(200);
+            }
+            else{
+
+                $("$dp").width(200);
+            }
+        }
+
+      {#function filePreview(input) {#}
+        {##}
+        {#    if (input.files && input.files[0]) {#}
+        {#        const reader = new FileReader();#}
+        {##}
+        {#        reader.onload = function (e) {#}
+        {#            $('#dp').attr({#}
+        {#                src: e.target.result,#}
+        {#            });#}
+        {##}
+        {#        };#}
+        {#        reader.readAsDataURL(input.files[0]);#}
+        {##}
+        {#        // Jquery if resolution of image is less than dp(200X200).#}
+        {##}
+        {#            $("#uploadCoverSettings").modal('show');#}
+        {#        }#}
+        {##}
+        {#    }#}
+        {##}
+        {#$("#profileImage").change(function() {#}
+        {##}
+        {#    filePreview(this);#}
+        {##}
+   //     });
+        {##}
+
+
+        $("img").attr("id","img-dp");
+
+        $('img').on('mousewheel', function(e){
+          if(e.originalEvent.wheelDelta > 0) {
+              console.log('up 3');
+              img.width=img.width + 100;
+               img.height=img.height + 100;
+          }
+          else {
+              console.log('down 3');
+              if(img.width > 300) {
+              img.width=img.width - 100;
+              img.height=img.height - 100; }
+          }
+      });
+
+
+      //image zoom
+        let canvas = document.getElementById('canvas');
+        let img = document.getElementById('img');
+
+        //positioning big img center to canvas center
+        img.onload = function(){
+
+        let x = -(img.width - canvas.offsetWidth)/2+"px"
+        let y = -(img.height - canvas.offsetHeight)/2+"px"
+        console.log(x, "$$$$");
+        console.log(y, "$$$$");
+        //scaling....
+        let ratio = canvas.offsetWidth/img.width
+        console.log(ratio, "$$$$");
+
+        img.style.transform = `translate(${x}, ${y}) scale(${ratio})`
+
+        }

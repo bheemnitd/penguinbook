@@ -1,0 +1,200 @@
+{% extends 'penguinbook/base.html' %}
+{% load static %}
+
+{% block profile %}
+    <style>
+
+    </style>
+
+    <!--------------------------------------------------------------DISPLAY COVER------------------------------------------------------>
+
+    <div class="container-fluid" style="background-color: #ebedff">
+        <div class="text-center" id="container-display-cover">
+            <div class="row" id="display-cover">
+                {% if avatar.profile.display_cover %}
+                    <img src="/penguinbook{{ avatar.profile.display_cover.url }}" class="cover" id="avatar-display-cover">
+                {% else %}
+                    <img src="{% static 'images/default_display_cover.png' %}" class="cover" id="default-display-cover">
+                {% endif %}
+                <!-----------------------------------------------------------EDIT DISPLAY COVER------------------------------------------------------>
+                <div class="" id="edit-display-cover">
+                    {% if avatar.id == request.user.id %}
+                    
+                    <div class="dropdown" id="display-cover-settings">
+                        <label class="btn-outline-dark btn-sm fas fa-camera-retro" data-toggle="dropdown" type="button" style="font-size: 22px;"> Edit </label>
+                        <ul class="dropdown-menu">
+                        <li>
+                            <form method = "post" enctype="multipart/form-data" id="form-upload-display-cover">
+                                <div class="form-inline">
+            
+                                    {% csrf_token %}
+                                    <input type="hidden" value="" class="crop-box-start-point-x" name="{{ profile_form.cropper_x.name }}">
+                                    <input type="hidden" value="" class="crop-box-start-point-y" name="{{ profile_form.cropper_y.name }}">
+                                    <input type="hidden" value="" class="crop-box-width"         name="{{ profile_form.cropper_width.name }}">
+                                    <input type="hidden" value="" class="crop-box-height"        name="{{ profile_form.cropper_height.name }}">
+                                    <input type="hidden" value="" class="photo-upload-flag"      name="{{ profile_form.photo_upload_flag.name }}">
+                                    <input type="hidden" value="" class="about-post"             name="{{ profile_form.about_post.name}}">
+                                    <input type="file" class="photo-upload" id="input-display-cover" name="{{ profile_form.display_cover.name }}" style="display:none;">
+                                    <label for="input-display-cover" class="btn">Upload Cover</label>
+                                </div>
+                            </form>
+                        </li>
+                        <li><label class="btn" id="select -photo-dp">Select photo</label></li>
+                        <li><label for="{{profile_form.display_cover.label }}" class="btn" id="reposition-image-dp">Reposition</label></li>
+                        <li class="divider bg-dark"></li>
+                        <li><label for="{{ profile_form.display_cover.label }}" class="btn" id="remove-image-dp">Remove</label></li>
+                        </ul>
+                    </div>
+                    {% else %}
+                        <form method="POST" id="form-send-friend-request" data-url='{{ request.build_absolute_uri|safe }}'>
+                            <!-- {% csrf_token %} -->
+                                <input type="hidden" id="send-user-id" name="send-user-id" value="{{avatar.id}}">
+                                <input type="hidden" id="friendship-approach" name="friendship-approach">
+                                <input type="hidden" id="user-action" name="user-action">
+
+                                {% if avatar.profile.friendship_status == "Add Friend" %}
+                                    <label for="user-action" class="fas fa-user-plus"  id="send-user-action"> {{avatar.profile.friendship_status}}</label>
+                                {% elif avatar.profile.friendship_status == "Friend" %}
+                                    <label for="user-action" class="fas fa-user-check" id="send-user-action"> {{avatar.profile.friendship_status}}</label>
+                                {% elif avatar.profile.friendship_status == "Cancel Request" %}
+                                    <label for="user-action" class="fas fa-user-times" id="send-user-action"> {{avatar.profile.friendship_status}}</label>
+                                {% elif avatar.profile.friendship_status == "Accept Request"%}
+                                    <label for="user-action" class="fas fa-user-alt"   id="send-user-action"> {{avatar.profile.friendship_status}}</label>
+                                {% else %}
+                                    <label for="user-action" class="fas fa-user-lock"  id="send-user-action"> {{avatar.profile.friendship_status}}</label>
+                                {% endif %}
+
+                            <!-- <input type="submit" class="submit" name="submit" value="Add Friend" id="friendship-approach"> -->
+                        </form>
+                    {% endif %}
+                </div>
+                
+                 <!--------------------------------------------------------------DISPLAY PICTURE------------------------------------------------------>
+                <div class="card" id="container-display-picture">
+            
+                    {% if avatar.profile.display_picture %}
+                        <img src="/penguinbook{{ avatar.profile.display_picture.url }}" class="display-picture" id="avatar-display-picture">
+                    {% else %}
+                        <img src="{% static '/images/user.png' %}" class="display_picture" id="default-display-picture">
+                    {% endif %}
+                    <!--------------------------------------------------------------EDIT DISPLAY PICTURE------------------------------------------------------>
+            
+                    <div class="mt-0 mb-0" id="edit-display-picture">
+                        {% if avatar.id == request.user.id %}
+                            <div class="dropdown" id="display-picture-settings">
+                                <label class="fas fa-camera" data-toggle="dropdown" type="button" style="font-size: 25px;"></label>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                    <form method="post" enctype="multipart/form-data" id="form-upload-display-picture">
+                                        <div class="form-inline">
+                    
+                                            {% csrf_token %}
+                                            <input type="hidden" value="" class="crop-box-start-point-x" name="{{ profile_form.cropper_x.name }}">
+                                            <input type="hidden" value="" class="crop-box-start-point-y" name="{{ profile_form.cropper_y.name }}">
+                                            <input type="hidden" value="" class="crop-box-width"         name="{{ profile_form.cropper_width.name }}">
+                                            <input type="hidden" value="" class="crop-box-height"        name="{{ profile_form.cropper_height.name }}">
+                                            <input type="hidden" value="" class="photo-upload-flag"      name="{{ profile_form.photo_upload_flag.name }}">
+                                            <input type="hidden" value="" class="about-post"             name="{{ profile_form.about_post.name}}">
+                                            <input type="file" value="" class="photo-upload" id="input-display-picture" name="{{ profile_form.display_picture.name }}" style="display:none;" accept="image/*">
+                                            <label for="input-display-picture" class="btn">Upload Profile</label>
+                                        </div>
+                                    </form>
+                                    </li>
+                                    <li><label class="btn" id="selectPhoto">Select photo</label></li>
+                                    <li><label for="{{ profile_form.display_image.label }}" class="btn" id="reposition_image">Reposition</label></li>
+                                    <li><label for="{{ profile_form.display_image.label }}" class="btn" id="removeImage">Remove</label></li>
+                                </ul>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <h2 class="firendsName mt-5 text-center" id="friends-name">{{avatar.first_name|title}} {{avatar.last_name|title}}({{avatar.id}})</h2>   
+        <hr>
+        <div class="container">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item"><a class="nav-link active" id="timeline" data-toggle="tab" href="#timeline" >Timeline</a></li>
+                <li class="nav-item"><a class="nav-link" id="friends" data-toggle="tab" href="#friends">Friends</a></li>
+                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#menu2">Photos</a></li>
+                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#menu3">Videos</a></li>
+                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#menu4">Events</a></li>
+                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#menu5">Group</a></li>
+                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#menu6">About</a></li>
+                <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">More</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="https://github.com/bheemnitd">Github</a>
+                        <a class="dropdown-item" href="https://www.penguinbook.com/sameer.kumar.750546/">penguinbook</a>
+                        <a class="dropdown-item" href="https://bheemnitd.github.io/">Gallery</a>
+                    </div>
+                </li>
+                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="covid19india.org">COVID19</a></li>
+                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#">Rpoart Bug</a></li>
+            </ul>
+    
+            <div class="tab-content">
+                <div id="timeline" class="container tab-pane active"><br>
+                    {% for post in timeline %}
+                        <div class="alert alert-secondary mt-3 " id="post-form">
+                            <div class="row">
+                                <div class="col-sm">
+                                    {% if post.user.profile.display_picture %}
+                                        <img src="/penguinbook{{ post.user.profile.display_picture.url }}" class="profile-icon" >
+                                    {% else %}
+                                        <!-- <img src="{% static '/images/profile_image_female.png' %}" class="mr-0 mt-0 rounded-circle" style="width:50px;"> -->
+                                        <img src="{% static '/images/user.png' %}" class="profile-icon">
+                                    {% endif %}
+                                    <strong><a href="{% url 'profile' %}?{{post.user.id}}" id="profileID" name="profile_id"> {{ post.user.first_name|title }} {{ post.user.last_name|title }}</a></strong>
+                                </div>
+                                <div class="col-sm text-right"> {{ post.post_date }}</div>
+                            </div>
+                            {% if not post.post_image%}   
+                                <div class="row center mt-2"><div class="col-sm" id="only-post-text">{{ post.post_text }}</div></div>
+                            {% else %}
+                                <div class="row mt-2"><div class="col-sm ml-3" id="post-text">{{ post.post_text }}</div></div>
+                                <div class="row text-center">
+                                    <img src="/penguinbook{{ post.post_image.url }}" class="mt-2 mr-0 mt-0 img-thumbnail img-fluid">
+                                </div>
+                            {% endif %}
+                            <hr>
+                            <div class="d-flex justify-content-between">
+                                <label style='font-size:15px' class="far fa-thumbs-up ml-5 like" id="{{post.id}}-{{post.user_id}}">{% ifequal post.likes 0 %} like {% else %} like {{ post.likes}}{% endifequal %}</label>
+                                <label style='font-size:15px' class="far fa-comment" id="comment"> comment</label>
+                                <label style='font-size:15px' class="far fa-share-square mr-5" id="share"> share</label>
+                            </div>
+                            <hr>
+                            <form method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="{{ user_post_form.post_text.label }}"></label>
+                                    <textarea class="form-control form-control-sm" rows="1" name="post-text" placeholder="comment . . ." style="border-radius: 30px"></textarea>
+                                </div>
+                            </form>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div id="friends" class="container tab-pane fade"><br>
+                    <input type="text" class="form-control form-control-sm mb-2" id="{{avatar.id}}" name="search-friend" placeholder="Search friends. . ." style="background: transparent;">                {% for friend in friends %}
+                        <div class="card" style="width:400px">
+                            {% if friend.profile.display_picture %}
+                                <img class="card-img-top" src="/penguinbook{{ friend.profile.display_picture.url }}" alt="Card image">
+                            {% else %}
+                                <img class="card-img-top" src="{% static 'images/user.png' %}" alt="Card image">
+                            {% endif %}
+                            <div class="card-body">
+                            <h4 class="card-title">{{friend.first_name|title}} {{friend.last_name|title}}</h4>
+                            <p class="card-text">{{friend.profile}}</p>
+                            <a href="{% url 'profile' %}?{{friend.id}}" name="profile_id" class="btn btn-primary">See Profile</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            <div id="menu2" class="container tab-pane fade"><br>
+                <h3>Menu 2</h3>
+                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

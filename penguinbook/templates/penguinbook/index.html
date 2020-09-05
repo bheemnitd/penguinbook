@@ -1,0 +1,246 @@
+{% extends 'penguinbook/header.html' %}
+{% load static %}
+
+{% block index %}
+
+    {% if signup_form.errors or login_form.errors.error %}
+        <script>
+        $(document).ready(function() {
+                $("#auth-error").modal("show");
+            });
+        </script>
+    {% endif %}
+    <!-----------------------------------------------AUTHENTICATION AND AUTHORIZATION ERROR MODAL------------------------------------>
+    <div class="modal fade" id="auth-error">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        {% if signup_form.errors %}
+                            <h2>Sign Up error!</h2>
+                        {% elif login_form.errors %}
+                            <h2>Log In error!</h2>
+                        {% endif %}
+                    </h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>                          
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    {% if signup_form.errors %}
+                        {{ signup_form.errors }}
+                    {% elif login_form.errors %}
+                        {{ login_form.errors.error }}
+                    {% endif %}
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-----------------------------------------------EMAIL VERIFICATION MODAL FOR PASSWORD RESET------------------------------------>
+
+    <div class="modal fade" id="find-email">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <h2>Email verification !</h2>
+                    </h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <p>Enter your registered email.</p>
+                    <form method="POST" id="form-find-email">
+                        <div class="form-group">
+                            <input type="email" placeholder="email" id="input-find-email" required,>
+                        </div>
+                        <div class="form-group">
+                            <input type="button" name="email-form" class="btn btn-primary" value="submit" id="submit-find-email">
+                        </div>
+                    </form>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-----------------------------------------------PASSWORD RESET MODAL------------------------------------>
+
+    <div class="modal fade" id="password-reset">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">
+                        <h2>Password reset !</h2>
+                    </h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <p>Setup new password.</p>
+                    <form method="POST" id="form-password-reset" class="form-group">
+                        <div class="form-group">
+                            <input type="password" placeholder="new password"  id="password1" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" placeholder="confirm password" id="password2" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="button" class="btn btn-primary" value="submit" id="submit-new-password">
+                        </div>
+                    </form>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-----------------------------------------------NAVBAR------------------------------------>
+
+    <nav class="navbar navbar-expand-sm navbar-dark">
+        <div class="col-sm-6 text-center">
+                <a class="navbar-brand" href="{% url 'index' %}" style="font-size: xx-large;font-family:Franklin Gothic Medium;">Penguinbook</a>
+        </div>
+        <div class = "col-sm-6">
+            <form class="form-inline" method="POST">
+                {% csrf_token %}
+                <div class="col">
+                    <div class="row">
+                        <input type="text" class="form-control form-control-sm mr-2 mt-1" id="{{ login_form.username.id_for_label }}" name = "{{ login_form.username.name }}" placeholder="Username" required>
+                        <div class="col">
+                            <div class="row">
+                                <input type="password" class="form-control form-control-sm mr-2 mt-1" id="{{ login_form.password.id_for_label }}" name = "{{ login_form.password.name }}" placeholder="Enter Password" required>
+                            </div>
+                            <div class="row" >
+                                <label id="forgot-password" type="button" style="color: #ebedff; font-size:smaller;background: none;">Forgot password ?</label>
+                            </div>                            
+                        </div>
+                        <div class="col-sm pull-left">
+                            <button type="submit" name='login-form' class="btn btn-sm btn-success pull-lef mt-1" style="height: fit-content;width: max-content;position:relative;left: -15px;">Log In</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </nav>
+
+    <!-----------------------------------------------INDEX BODY------------------------------------>
+
+    <div class="container-fluid p-3 text-white" style="background-color: #ebedff">
+        <div class="row">
+            <div class="col-sm-2" style="min-height: 100%"></div>
+            <div class="col-sm-5">
+                <h2 class="index-connect-text">We support multiple account from same email. Even we support dummy email.</h2><br>
+                <img src = "{% static 'images/connect.png' %}" class="img-fluid">
+            </div>
+
+            <div class="col-sm-4">
+                <h1 class="index-create-text">Create an account</h1>
+                <p class="index-create-text">It's quick and easy.</p>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input type="text" class="form-control form-control-sm" name="{{ signup_form.first_name.name }}" placeholder="First Name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control form-control-sm" name="{{ signup_form.last_name.name }}" placeholder="Last Name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control form-control-sm" name="{{ signup_form.username.name }}" placeholder="Username" required>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="email" class="form-control form-control-sm" name="{{ signup_form.email.name }}" placeholder="Email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="password" class="form-control form-control-sm" name="{{ signup_form.password1.name }}" placeholder="Enter Password" required>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="password" class="form-control form-control-sm" name="{{ signup_form.password2.name }}" placeholder="Retype Password" required>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="date" class="form-control form-control-sm" id="date-of-birth" name="{{ gender_dob_form.date_of_birth.name }}" required>
+                    </div>
+
+                    <div class="form-check-inline">
+                        <label class="form-check-label" for="male">
+                            <input type="radio" class="form-check-input" id="male" name="{{ gender_dob_form.gender.name }}" value="M" checked>Male
+                        </label>
+                    </div>
+                    <div class="form-check-inline">
+                        <label class="form-check-label" for="female">
+                            <input type="radio" class="form-check-input" id="female" name="{{ gender_dob_form.gender.name }}" value="F">Female
+                        </label>
+                    </div>
+                    <div class="form-check-inline">
+                        <label class="form-check-label" for="custom">
+                            <input type="radio" class="form-check-input" id="custom" name="{{ gender_dob_form.gender.name }}" value="C">Custom
+                        </label>
+                    </div>
+                    <button type="submit" name='signup-form' class="btn btn-sm btn-success float-right">Sign Up</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- <div class="row-sm text-center" style="color: black; font-size: xx-large;font-family:Georgia, 'Times New Roman', Times, serif">Collaboration with</div>
+        <div class="d-flex justify-content-center text-center">
+
+                <img src="{% static '/images/tfe.png' %}" class="display_picture" 
+                
+                style="width:200px;
+                border-radius: 100%; 
+            
+                border: 1px solid #747ab6;
+                padding: 5px;
+                margin-bottom: 10px;
+                -moz-box-shadow: 0px 6px 5px #ccc;
+                -webkit-box-shadow: 0px 6px 5px #ccc;
+                box-shadow: 0px 6px 5px #ccc;
+                -moz-border-radius:190px;
+                -webkit-border-radius:190px;"
+                        
+                >   
+                <img src="{% static '/images/yebitgaihaigormint.jpg' %}" class="ml-3 display_picture"
+                
+                style="width:200px; 
+                border-radius: 100%; 
+            
+                border: 1px solid #747ab6;
+                padding: 5px;
+                margin-bottom: 10px;
+                -moz-box-shadow: 0px 6px 5px #ccc;
+                -webkit-box-shadow: 0px 6px 5px #ccc;
+                box-shadow: 20px 20px 20px #ccc;
+                -moz-border-radius:200px;
+                -webkit-border-radius:200px;"
+                
+                >
+        </div> -->
+    </div>
+    <hr style="margin-top:0px">
+
+
+{% endblock %}

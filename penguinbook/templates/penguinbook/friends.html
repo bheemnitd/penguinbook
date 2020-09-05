@@ -1,0 +1,18 @@
+{% extends 'penguinbook/profile.html' %}
+{% block friends %}
+    <textarea class="form-control form-control-sm mb-2" id="about-post" name="post-text" rows="1" placeholder="Write about post. . ."></textarea>
+    {% for friend in friends %}
+        <div class="card" style="width:400px">
+            {% if friend.profile.display_picture %}
+                <img class="card-img-top" src="/penguinbook{{ friend.profile.display_picture.url }}" alt="Card image">
+            {% else %}
+                <img class="card-img-top" src="{% static 'images/user.png' %}" alt="Card image">
+            {% endif %}
+            <div class="card-body">
+            <h4 class="card-title">{{friend.first_name|title}} {{friend.last_name|title}}</h4>
+            <p class="card-text">{{friend.profile}}</p>
+            <a href="{% url 'profile' %}?{{friend.id}}" name="profile_id" class="btn btn-primary">See Profile</a>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

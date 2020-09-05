@@ -1,0 +1,324 @@
+/************************************************************ FOR ALL PAGE ****************************************************************/
+
+.navbar{
+  background-color: #454fb0;
+}
+.fas:hover{
+  /* color: rgb(17, 73, 196); */
+  cursor:pointer;
+}
+.far:hover{
+  /* color: rgb(17, 73, 196); */
+  cursor:pointer;
+}
+#about-post{
+  border: 0;
+  border-bottom:groove;
+  box-shadow: none;
+  width: 61%;
+}
+/********************************************************** FOR COMMON NAVBAR(HOME & PROFILE)*********************************************/
+
+.badge {
+  background-color: red;
+  color: white;
+  font-size: small;
+  text-decoration: none;
+}
+#message-notifications .badge {
+  position: relative;
+  left:-10px;
+  top:-10px;
+}
+
+#notifications .badge {
+  position: relative;
+  left:-7px;
+  top:-10px;
+}
+#notifications-friendship .badge {
+  position: relative;
+  left:-9px;
+  top:-10px;
+}
+
+#notifications-friendship-toast{
+  right: 2%;
+  position:absolute;
+  height: 50%;
+  width: 100%;
+  z-index: 1;
+  border-radius: 10px;
+}
+
+#notifications-friendship-toast-body{
+
+  height: 100%;
+  overflow:auto;
+}
+.pending-received-friend-request:hover {
+  text-decoration:none;
+  color:lightslategray;
+}
+#query-search-box {
+  border: 0;
+  outline: 0;
+  background: transparent;
+  border-bottom: 1px solid white;
+  box-shadow: none;
+  cursor: text;
+  caret-color: white;
+  color: white;
+  width: 100%;
+}
+
+#filter-submit {  
+  background-color:transparent;
+  /* position: relative; */
+  /* z-index: 1; */
+  /* left: 0px;
+  top: 5px; */
+  color: white;
+  border: none;
+  /*cursor: pointer;
+  width: 0; */
+}
+
+#query-search-box::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: white;
+  text-align: center;
+  opacity: .5; /* Firefox */
+}
+
+#my-profile #first-name{
+  position: relative;
+  left:0px;
+}
+
+#form-query-search{
+  width:fit-content;
+}
+
+#colapse-menu{
+  border:none;
+  outline: none;
+  box-shadow: none;
+  float:right;
+}
+.rounded-circle{
+ 
+  border: 2px solid lightslategrey;
+  margin-left: -14px;
+  margin-top: -6px;
+  width:37px;            
+}
+#user-icon-name{
+  color:lightslategrey;
+  background-color: white ;
+  border-radius: 30px; 
+  height: 40px;
+  
+}
+#user-icon-name:hover{
+  color:black;
+  background-color: rgb(235, 248, 255);
+  
+  
+}
+.profile-icon{
+  width:40px;
+  border:royalblue 3px solid;
+  border-radius: 3px;
+}
+.border{
+  border:gba(198, 203, 206, 0.603) 1px solid;
+  border-radius: 10px;
+}
+/********************************************************** INDEX PAGE ****************************************************************/
+
+.index-connect-text{
+  margin-top: 10%;
+  color :#454fb0;
+}
+.index-create-text,.form-check-label{
+  color: black;
+}
+
+/********************************************************** HOME PAGE *****************************************************************/
+
+.reply-box{
+  display:inline-block;
+  width: 100%;
+  margin-bottom: -15px;
+}
+#friend-text-reply{
+  border-radius: 0px 20px 20px 20px;
+
+  /* word-wrap: break-word; */
+}
+#user-text-reply{
+  border-radius: 20px 0px 20px 20px;
+
+}
+
+div.b {
+  white-space: nowrap; 
+  width: 50px; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
+  border: 1px solid #000000;
+}
+.center{
+  display: flex;
+
+  align-items: center;
+  text-align: center;
+  font-size: xx-large;
+  
+  border-radius: 10px;
+  background-image: linear-gradient(to right,blue 0%,red 100%);
+  background-blend-mode:color;
+  min-height: 300px;
+  color:white;
+  border:5px solid white
+}
+.img-thumbnail{
+  width: 100%;
+  /* height: auto; */
+  /* object-fit: cover; */
+}
+#search-friend{
+  border: 0;
+  /* border-bottom:groove; */
+  box-shadow: none;
+  
+}
+.short-info{
+  font-size: large;
+  color:black;
+}
+
+#short-info-container {
+  float: left;
+  width: 25%;
+  height: 100%;
+  overflow: auto;
+}
+
+.short-info:hover{
+  background-color:  rgb(221, 221, 221);
+  border-radius: 30px;
+  text-decoration:none;
+}
+
+#friends-post {
+  float: left;
+  width: 50%;
+  height: 100%;
+  overflow: auto;
+}
+#online-friends {
+  float: right;
+  width: 25%;
+  height: 94%;
+  overflow: auto;
+}
+.friend:hover{
+  cursor:pointer;
+  font-size: large;
+}
+#chat-box{
+  position:fixed;
+  right:2%;
+  bottom:-1%;
+  height: 60%;
+  padding-bottom:95px !important;
+}
+#chat-box-body{
+  height: 98%;
+  overflow:auto;
+}
+#chat-log{
+
+  opacity: 1;
+}
+#message-reply-input-box{
+  position: relative;
+  /* top:-26px; */
+  /* margin-bottom:5px !important; */
+  border-radius: 20%;
+}
+#chat-message-input{
+  position: relative;
+  border-radius: 10px;
+  width: 85%;
+
+  border: none;
+  /* box-shadow: none; */
+  resize: none;
+  outline: none;
+  /* row-gap: 4; */
+}
+.carousel-control-next-icon,
+.carousel-control-prev-icon {
+  filter: invert(50%);
+  height: 50px;
+  width: 50px;    
+}
+
+/********************************************************** PROFILE PAGE ***************************************************************/
+img {
+  max-width: 100%; /* This rule is very important, please do not ignore this! */
+}
+#canvas {
+  width: 600px;
+  height: 400px;
+  cursor: default;
+}
+#container-display-cover{
+  margin: 0 auto;
+  width: 100%;
+}
+#display-cover{
+  position: relative;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+.cover{
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+#edit-display-cover{
+  position: absolute;
+  right: 1%;
+  bottom: 0px;
+}
+#container-display-cover, #display-cover, #edit-display-cover{
+  /* position: relative; */
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  /* vertical-align: middle; */
+}
+#container-display-picture{
+  min-width: 155px;
+  min-height: 155px;
+  bottom: -20%;
+  left:5%
+}
+#container-display-picture, .display-picture{
+  position: absolute;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+
+      width: 150px;
+      height: 150px; 
+      border-radius: 100%;
+}
+#edit-display-picture{
+  position: absolute;
+  right:5%;
+  bottom:10%;
+}
+

@@ -1,0 +1,249 @@
+{% extends "penguinbook/base.html" %}
+{% load static %}
+
+{% block home %}
+    <style>
+
+  
+        #content, html, body {
+            height: 97.6%;
+            background-color: #ebedff;
+        }
+        
+        
+    </style>
+
+    <div id="content">
+        <div class="p-3" id="short-info-container">
+            <a class="nav-link" href="{% url 'profile' %}?{{user.id}}" id="user-icon-name">
+                {% if user.profile.display_picture %}
+                    <img src="/penguinbook{{ user.profile.display_picture.url }}" class="mr-1 mb-1 rounded-circle" >
+                {% else %}
+                    <img src="{% static '/images/user.png' %}" class="mr-1 mb-1 rounded-circle">
+                {% endif %}
+                <span id="first-name" style="position: relative;top:-3px;">{{ user.first_name|title }} {{ user.last_name|title }}</span>
+            </a>
+      
+            <div class="d-flex flex-column">
+                <a class="p-2 mt-2 short-info" href="{% url 'profile' %}?{{user.id}}">
+                    <div class="d-flex justify-content-between">
+                        <div class="" class="">Friends</div>
+                        <i class='fas fa-user-friends mt-1' style='font-size:20px'></i>
+                    </div>
+                </a>
+
+                <a class="p-2 mt-2 short-info" href="{% url 'profile' %}?{{user.id}}">
+                    <div class="d-flex justify-content-between">
+                        <div class="" class="">Sent friend request {{pending_sent_friend_request|length}}</div>
+                        <i class='fas fa-user-clock mt-1' style='font-size:20px'></i>
+                    </div>
+                </a>
+               
+                <a class="p-2 mt-2 short-info" href="#">
+                    <div class="d-flex justify-content-between">
+                        <div class="" class="">Together messenger</div>
+                        <i class='fas fa-comments mt-1' style='font-size:20px'></i>
+                    </div>
+                </a>
+                <a class="p-2 mt-2 short-info" href="#">
+                    <div class="d-flex justify-content-between">
+                        <div class="" class="">Broadcast message</div>
+                        <i class='fas fa-broadcast-tower mt-1' style='font-size:20px'></i>
+                    </div>
+                </a>                
+                <a class="p-2 mt-2 short-info" href="#">
+                    <div class="d-flex justify-content-between">
+                        <div class="" class="">Schedule brodcast</div>
+                        <i class='fas fa-stopwatch mt-1 mr-1' style='font-size:20px'></i>
+                    </div>
+                </a>
+
+                <a class="p-2 mt-2 short-info" href="#">
+                    <div class="d-flex justify-content-between">
+                        <div class="" class="">Rooms</div>
+                        <i class='fas fa-users mt-1' style='font-size:20px'></i>
+                    </div>
+                </a>
+
+                <a class="p-2 mt-2 short-info" href="#">
+                    <div class="d-flex justify-content-between">
+                        <div class="" class="">Create room</div>
+                        <i class='fas fa-plus mt-1 mr-1' style='font-size:20px'></i>
+                    </div>
+                </a>
+                <a class="p-2 mt-2 short-info" href="#">
+                    <div class="d-flex justify-content-between">
+                        <div class="" class="">Games</div>
+                        <i class='fas fa-gamepad mt-1' style='font-size:20px'></i>
+                    </div>
+                </a>
+                <a class="p-2 mt-2 short-info" href="#">
+                    <div class="d-flex justify-content-between">
+                        <div class="" class="">Pages you liked</div>
+                        <i class='fas fa-check mt-1 mr-1' style='font-size:20px'></i>
+                    </div>
+                </a>
+                <a class="p-2 mt-2 short-info" href="#">
+                    <div class="d-flex justify-content-between">
+                        <div class="" class="">Public post</div>
+                        <i class='fas fa-users mt-1 mr-1' style='font-size:20px'></i>
+                    </div>
+                </a>
+                <a class="p-2 mt-2 short-info" href="#">
+                    <div class="d-flex justify-content-between">
+                        <div class="" class="">Friends post</div>
+                        <i class='fas fa-user-friends mt-1 mr-1' style='font-size:20px'></i>
+                    </div>
+                </a>
+            </div>
+        </div>
+        
+        <div id="friends-post">
+            
+            <!---------------------------------------------------------------------PUBLIC/UNKNOWN PROFILE------------------------------------------------------>
+            {% if unknown_avatars %}
+                <div class="col-sm mt-2 p-4 border">
+                    <div class="carousel slide" id="public-profile" data-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <div class="d-flex justify-content-around">
+                                    {% for unknown_avatar in unknown_avatars %}
+                                        <div class="card text-center" style="width:150px;height:200px; border-radius: 10px;overflow: hidden;">
+                                            {% if unknown_avatar.profile.display_picture %}
+                                                <img class="card-img-top" src="/penguinbook{{ unknown_avatar.profile.display_picture.url }}" alt="Card image" style="width:100%">
+                                            {% else %}
+                                                <img src="{% static '/images/user.png' %}" style="width:100%">
+                                            {% endif %}
+                                            <div class="card-body">
+                                                <h4 class="card-title" style="font-size:initial;">{{ unknown_avatar.first_name|title}}</h4>
+                                                <a href="{% url 'profile' %}?{{ unknown_avatar.id }}" id="profileID" name="profile_id" class="btn btn-sm btn-primary stretched-link"></a>
+                                            </div>
+                                        </div>
+                                    {% if forloop.last %}
+                                </div>
+                            </div>
+                                    {% elif forloop.counter|divisibleby:4 %}
+                                </div>
+                            </div>
+                                <div class="carousel-item">
+                            <div class="d-flex justify-content-around">
+                                {% endif %}                
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <a class="carousel-control-prev" href="#public-profile" data-slide="prev">
+                        <span class="carousel-control-prev-icon"></span>
+                    </a>
+                    <a class="carousel-control-next" href="#public-profile" data-slide="next">
+                        <span class="carousel-control-next-icon"></span>
+                    </a>
+                </div>
+            {% endif %}
+            {% block post %}
+            <form method="POST" enctype="multipart/form-data" class="alert border mt-3 " id="form-post-text-image" data-url='{{ request.build_absolute_uri|safe }}'>
+                <label>
+                    {% if user.profile.display_picture %}
+                        <img src="/penguinbook{{ user.profile.display_picture.url }}" class="profile-icon">
+                    {% else %}
+                        <img src="{% static '/images/user.png' %}" class="profile-icon">
+                    {% endif %}
+                    <strong><a href="{% url 'profile' %}?{{ user.id }}" id="profileID" name="profile_id"> {{ user.first_name|title }}</a></strong>
+                </label>
+                {% csrf_token %}
+                <div class="form-group">
+                    <input type="text" class="form-control form-control-sm" id="post-text"   name="{{ post_form.post_text.name }}" placeholder="Write something here. . ." style="border-radius: 30px">
+                </div>
+                <input type="hidden" value="" class="crop-box-start-point-x"    name="{{ post_form.cropper_x.name }}">
+                <input type="hidden" value="" class="crop-box-start-point-y"    name="{{ post_form.cropper_y.name }}">
+                <input type="hidden" value="" class="crop-box-width"            name="{{ post_form.cropper_width.name }}">
+                <input type="hidden" value="" class="crop-box-height"           name="{{ post_form.cropper_height.name }}">
+                <input type="hidden" value="" class="about-post"                name="{{ post_form.about_post.name }}">
+                <input type="file" class="photo-upload" id="input-post-image"   name="{{ post_form.post_image.name }}" style="display: none;" accept="image/*">
+                <div class="d-flex justify-content-between">
+                    <label for="input-post-image" id="upload-image-btn" class="fas fa-photo-video ml-3" style="border-radius: 30px">Photo/Video</label>
+                    <input type="button" class="btn btn-success btn-sm upload-button" id="post-text-submit" value="post">
+                </div>
+            </form>
+            {% endblock %}
+            <!---------------------------------------------------------------------FRIENDS POST DISPLAY------------------------------------------------------>
+
+            {% for post in friends_post %}
+                <div class="alert mt-3" style="border:rgba(198, 203, 206, 0.603) 1px solid;border-radius: 10px;">
+                    <div class="row">
+                        <div class="col-sm">
+                            {% if post.user.profile.display_picture %}
+                                <img src="/penguinbook{{ post.user.profile.display_picture.url }}" class="profile-icon">
+                            {% else %}
+                                <img src="{% static '/images/user.png' %}" class="profile-icon">
+                            {% endif %}
+                            <strong><a href="{% url 'profile' %}?{{post.user.id}}" id="profileID" name="profile_id"> {{ post.user.first_name|title }} {{ post.user.last_name|title }}</a></strong>
+                            {{post.id}}
+                        </div>
+                        <div class="col-sm text-right">{{ post.post_date }}</div>
+                    </div>
+                    {% if not post.post_image%}
+                        <div class="row center mt-2"><div class="col-sm" id="only-post-text">{{ post.post_text }}</div></div>
+                    {% else %}
+                        <div class="row mt-2"><div class="col-sm ml-3" id="post-text">{{ post.post_text }}</div></div>
+                        <div class="row text-center">
+                            <img src="/penguinbook{{ post.post_image.url }}" class="mt-2 mr-0 mt-0 img-thumbnail img-fluid">
+                        </div>
+                    {% endif %}
+                    <hr>
+                    <div class="d-flex justify-content-between">
+                        <label style='font-size:15px' class="far fa-thumbs-up ml-5 like" id="{{post.id}}-{{post.user_id}}">{% ifequal post.likes 0 %} like {% else %} like {{ post.likes}}{% endifequal %}</label>
+                        <label style='font-size:15px' class="far fa-comment" id="comment"> comment</label>
+                        <label style='font-size:15px' class="far fa-share-square mr-5" id="share"> share</label>
+                    </div>
+                    <!-- <hr> -->
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="text" class="form-control form-control-sm bg-transparent" name="post-comment" placeholder="comment and share are under devlopement..." style="border:0;box-shadow: none;">
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+
+
+        <!--------------------------------------------------------ONLINE FRIENDS---------------------------------------------------->
+
+            <div class="d-flex justify-content-around bg-blank p-1" id="online-friends-header" style="background-color: white;position:sticky;top:0px">
+                <div class="mt-1"><strong class="mr-auto text-primary" style="font-size: large;"><a href="#">Online</a></strong></div>
+                <div class="ml-3"><input type="search" class="form-control form-control-sm bg-transparent" id="search-friend" placeholder="search friend..." required></div>
+
+                <form class="form-inline" method="POST" id="form-friend-search">
+                    {% csrf_token %}
+                    <div class="d-flex justify-content-around">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="offline" name="offline">
+                            <label class="custom-control-label" for="offline"></label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div id="online-friends">
+                <div class="" id="online-friends-body" style="overflow:hidden">
+                    {% for friend in friends %}
+                        <div class="alert" style="border: none; margin-bottom: -10px;">
+                            <div class="row d-flex bg-blank">                        
+                                <div class="col-sm friend">
+                                    {% if friend.profile.display_picture %}
+                                        <img src="/penguinbook{{ friend.profile.display_picture.url }}" class="profile-icon">
+                                    {% else %}
+                                        <img src="{% static '/images/user.png' %}" class="profile-icon">
+                                    {% endif %}   
+                                    <strong id="{{friend.id}}" name="{{friend.first_name|title}}">{{ friend.first_name|title }} {{ friend.last_name|title }}</strong>                                    
+                                </div>
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="online-{{friend.user_id}}" name="offline">
+                                    <label class="custom-control-label" for="offline"></label>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
