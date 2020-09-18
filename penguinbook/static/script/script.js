@@ -303,8 +303,7 @@ $(document).ready(function() {
    
     /********************************************************** SCRIPT FOR PROFILE PAGE *********************************************/
     
-    var canvas  = $('#canvas');
-    context = canvas.get(0).getContext('2d');
+
     // var preview = $('#preview');
 
     /* FLAG TO GET INFO WHTHER YOU ARE UPLOADING DISPLAY PICTURE OR DISPLAY COVER. */
@@ -312,6 +311,10 @@ $(document).ready(function() {
     
     /* SCRIPT TO OPEN THE PHOTO ON MODAL TO EDIT, PREVIEW AND UPLOAD. */
     $(".photo-upload").change(function (event) {
+
+        var canvas  = $('#canvas');
+        context = canvas.get(0).getContext('2d');
+        
         if (this.files && this.files[0]) {
 
             if ( this.files[0].type.match(/^image\//)){
