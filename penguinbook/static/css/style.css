@@ -266,6 +266,18 @@ div.b {
   width: 50px;    
 }
 
+.likers{
+  position:absolute;
+  z-index:1;
+  height:350px;
+  border-radius: 10px;   
+  bottom: 0px;         
+
+}
+.likers-body{
+  height: 100%;
+  overflow:auto;
+}
 /********************************************************** PROFILE PAGE ***************************************************************/
 img {
   max-width: 100%; /* This rule is very important, please do not ignore this! */

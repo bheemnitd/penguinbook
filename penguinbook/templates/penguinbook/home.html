@@ -2,17 +2,12 @@
 {% load static %}
 
 {% block home %}
-    <style>
-
-  
-        #content, html, body {
-            height: 97.6%;
-            background-color: #ebedff;
-        }
-        
-        
-    </style>
-
+<style>
+    #content, html, body {
+        height: 97.6%;
+        background-color: #ebedff;
+    }
+</style>
     <div id="content">
         <div class="p-3" id="short-info-container">
             <a class="nav-link" href="{% url 'profile' %}?{{user.id}}" id="user-icon-name">
@@ -99,7 +94,6 @@
         </div>
         
         <div id="friends-post">
-            
             <!---------------------------------------------------------------------PUBLIC/UNKNOWN PROFILE------------------------------------------------------>
             {% if unknown_avatars %}
                 <div class="col-sm mt-2 p-4 border">
@@ -139,7 +133,9 @@
                     </a>
                 </div>
             {% endif %}
-            {% block post %}
+            <!---------------------------------------------END OF PUBLIC/UNKNOWN PROFILE------------------------------->
+
+            <!-------------------------------------POST PUBLICATIONS---------------------------------------->
             <form method="POST" enctype="multipart/form-data" class="alert border mt-3 " id="form-post-text-image" data-url='{{ request.build_absolute_uri|safe }}'>
                 <label>
                     {% if user.profile.display_picture %}
@@ -164,48 +160,105 @@
                     <input type="button" class="btn btn-success btn-sm upload-button" id="post-text-submit" value="post">
                 </div>
             </form>
-            {% endblock %}
-            <!---------------------------------------------------------------------FRIENDS POST DISPLAY------------------------------------------------------>
+            <!-------------------------------------END OF POST PUBLICATIONS------------------------------------------------------>
 
+            <!---------------------------------------FRIENDS POST DISPLAY--------------------------------------->
             {% for post in friends_post %}
-                <div class="alert mt-3" style="border:rgba(198, 203, 206, 0.603) 1px solid;border-radius: 10px;">
+                <div class="alert mt-3" style="border:rgba(198, 203, 206, 0.603) 1px solid;border-radius: 10px;" id="post-id-{{post.post.id}}">
                     <div class="row">
                         <div class="col-sm">
-                            {% if post.user.profile.display_picture %}
-                                <img src="/penguinbook{{ post.user.profile.display_picture.url }}" class="profile-icon">
+                            {% if post.post.user.profile.display_picture %}
+                                <img src="/penguinbook{{ post.post.user.profile.display_picture.url }}" class="profile-icon">
                             {% else %}
                                 <img src="{% static '/images/user.png' %}" class="profile-icon">
                             {% endif %}
-                            <strong><a href="{% url 'profile' %}?{{post.user.id}}" id="profileID" name="profile_id"> {{ post.user.first_name|title }} {{ post.user.last_name|title }}</a></strong>
-                            {{post.id}}
+                            <strong><a href="{% url 'profile' %}?{{post.post.user.id}}" id="profileID" name="profile_id"> {{ post.post.user.first_name|title }} {{ post.post.user.last_name|title }}</a></strong>
+                            {{post.post.id}}
                         </div>
-                        <div class="col-sm text-right">{{ post.post_date }}</div>
+                        <div class="col-sm text-right">{{ post.post.post_date }}</div>
                     </div>
-                    {% if not post.post_image%}
-                        <div class="row center mt-2"><div class="col-sm" id="only-post-text">{{ post.post_text }}</div></div>
+                    {% if not post.post.post_image%}
+                        <div class="row center mt-2"><div class="col-sm" id="only-post-text">{{ post.post.post_text }}</div></div>
                     {% else %}
-                        <div class="row mt-2"><div class="col-sm ml-3" id="post-text">{{ post.post_text }}</div></div>
+                        <div class="row mt-2"><div class="col-sm ml-3" id="post-text">{{ post.post.post_text }}</div></div>
                         <div class="row text-center">
-                            <img src="/penguinbook{{ post.post_image.url }}" class="mt-2 mr-0 mt-0 img-thumbnail img-fluid">
+                            <img src="/penguinbook{{ post.post.post_image.url }}" class="mt-2 mr-0 mt-0 img-thumbnail img-fluid">
                         </div>
                     {% endif %}
+                    
+                    <div class="d-flex mt-2 justify-content-between">
+                        <label style="font-size:15px;" class="ml-5 likes" id="likes-{{post.post.id}}-{{post.post.user_id}}">{% ifequal post.likes|length 0 %}Likes {% else%}Likes {{ post.likes|length }}{% endifequal %}</label>
+                        <label style='font-size:15px' class="comment"> Comments</label>
+                        <label style='font-size:15px' class="share mr-5" id="share"> Shares</label>
+                    </div>
                     <hr>
-                    <div class="d-flex justify-content-between">
-                        <label style='font-size:15px' class="far fa-thumbs-up ml-5 like" id="{{post.id}}-{{post.user_id}}">{% ifequal post.likes 0 %} like {% else %} like {{ post.likes}}{% endifequal %}</label>
-                        <label style='font-size:15px' class="far fa-comment" id="comment"> comment</label>
+
+                    <!------------------------------------TOAST TO DISPLAY WHO LIKED THE POST-------------->
+                    {% if post.likes|length > 0 %}
+                        <div class="toast hide likers bg-transparent" data-autohide="false" id="likers-{{post.post.id}}">
+                            <div class="toast-header d-flex justify-content-between bg-blank">
+                                <strong class="mr-auto"><i class="far fa-thumbs-up"></i> {{post.likes|length}} </strong>
+                                <small class="mr-2">11 mins ago </small>
+                                <button type="button" class="close" id="notifications-friendship-toast-close"data-dismiss="toast" style="color:red" >&times;</button>
+                            </div>
+                            <div class="toast-body likers-body">
+                                {% for like in post.likes %}
+                                    <div class="p-1">
+                                        <a href="{% url 'profile' %}?{{like.id}}">
+                                            {% if like.profile.display_picture %}
+                                                <img src="/penguinbook{{ like.profile.display_picture.url }}" class="profile-icon">
+                                            {% else %}
+                                                <img src="{% static '/images/user.png' %}" class="profile-icon">
+                                            {% endif %}
+                                            {{like.first_name|title}} {{like.last_name|title}}
+                                        </a>
+                                    </div>
+                                {% endfor %}
+                                <hr>        
+                            </div>
+                        </div>
+                    {% endif %}
+                    <!-----------------------------------END OF TOAST TO DISPLAY WHO LIKED THE POST------------------------->
+
+
+                    <!-----------------------------------SCRIPT TO LIKE COMMENT AND SHARE THE POST------------------------->
+                    <div class="d-flex justify-content-around">
+                        {% if user in post.likes %}
+                            <label style="font-size:15px;color:blue" class="far fa-thumbs-up ml-5 like" id="like-{{post.post.id}}-{{post.post.user_id}}"> like</label>
+                        {% else %}
+                            <label style="font-size:15px;color:none" class="far fa-thumbs-up ml-5 like" id="like-{{post.post.id}}-{{post.post.user_id}}"> like</label>
+                        {% endif %}
                         <label style='font-size:15px' class="far fa-share-square mr-5" id="share"> share</label>
                     </div>
-                    <!-- <hr> -->
-                    <form method="POST" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <input type="text" class="form-control form-control-sm bg-transparent" name="post-comment" placeholder="comment and share are under devlopement..." style="border:0;box-shadow: none;">
-                    </form>
+
+                    <input type="text" class="form-control form-control-sm comment" id="comment-id-{{post.post.id}}-{{post.post.user_id}}-{{user.id}}" name="post-comment" placeholder="comment..." style="border-radius:30px;">
+                    <!-----------------------------------END OF SCRIPT TO LIKE COMMENT AND SHARE THE POST------------------------->
+
+                    <!------------------------------------TOAST TO DISPLAY WHO COMMENTED THE POST-------------->
+                    {% if post.comments|length > 0 %}
+                    <div class="card bg-transparent" id="post-{{post.post.id}}"data-toggle="collapse" data-target="#_{{post.post.id}}" style="border:none">
+                        <a class="card-link p-2" href="#">
+                            View all {{post.comments|length}} comments
+                        </a>
+                        <div id="_{{post.post.id}}" class="collapse">
+                            <hr>
+                            {% for comment in post.comments %}
+                            <div class="p-1">
+                                <a href="{% url 'profile' %}?{{like.id}}">
+                                {{comment.user__first_name|title}} {{comment.user__last_name|title}} 
+                                </a>{{comment.comment_text}}
+                            </div>
+                        {% endfor %}
+                        </div>
+                    </div>
+                    {%endif%}
+                    <!------------------------------------END OF TOAST TO DISPLAY WHO COMMENTED THE POST-------------->
                 </div>
             {% endfor %}
+            <!-----------------------------------------------------END OF FRIENDS POST DISPLAY--------------------------------------->
         </div>
 
-
-        <!--------------------------------------------------------ONLINE FRIENDS---------------------------------------------------->
+            <!--------------------------------------------------------ONLINE FRIENDS---------------------------------------------------->
 
             <div class="d-flex justify-content-around bg-blank p-1" id="online-friends-header" style="background-color: white;position:sticky;top:0px">
                 <div class="mt-1"><strong class="mr-auto text-primary" style="font-size: large;"><a href="#">Online</a></strong></div>
@@ -244,6 +297,7 @@
                     <hr>
                 </div>
             </div>
+            <!--------------------------------------------------------END OF ONLINE FRIENDS---------------------------------------------------->
         </div>
     </div>
 {% endblock %}

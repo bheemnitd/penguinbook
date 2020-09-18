@@ -1,9 +1,8 @@
 $(document).ready(function() {
 
     // GLOBLE VARIABLES
-    const currentUserID = document.getElementById("current-user-id").innerHTML;
+    const currentUserID = NaN;
     var chattingFriendID = 0;
-    var likeActivity = new Array();
     var socketList = new Array();
     /********************************************************** INDEX NAVBAR *********************************************/
 
@@ -101,15 +100,15 @@ $(document).ready(function() {
     });
 
     $(".like").click(function(event){
-
         // GET THE ID OF POST WHETHER IT IS TEXT POST OR IAMGE POST OR BOTH AND ID OF POSTER(THE USER WHO POSTED).
-        const [postID, posterID] = event.target.id.split("-"); 
-
-        likes = $("#"+event.target.id).text().split(" ")[2];
+        // alert(event.target.id);
+        const [postID, posterID] = event.target.id.split("-").slice(1,)
+        likes = $("#likes-"+postID+"-"+posterID).text().split(" ")[1];
+        // alert(postID);
+        // alert(posterID);
+        // alert(likes);
         var likeStatus = NaN;
-        if (jQuery.inArray(postID+currentUserID, likeActivity)==-1){
-
-            likeActivity.push(postID+currentUserID);
+        if($("#"+event.target.id).css("color")!='rgb(0, 0, 255)'){
             if (likes==""){
                 likes=0;
             }
@@ -118,7 +117,6 @@ $(document).ready(function() {
             // $("#"+event.target.id).text(" like "+likes).css("color", "blue");            
         }else{
 
-            likeActivity.pop(postID+currentUserID);
             likes=Number(likes) - 1;
             likeStatus = "unliked";
             // $("#"+event.target.id).text(" like "+likes).css("color", "");            
@@ -136,18 +134,23 @@ $(document).ready(function() {
                 like_status:likeStatus,
                 like_gainer_id: posterID
             },
-            success:function(data){
+            success:function(){
                 if (likeStatus=="liked"){
 
-                    $("#"+event.target.id).text(" like "+data.likes_of_post).css("color", "blue");
+                    $("#likes-"+postID+"-"+posterID).text("Likes "+likes);
+                    $("#"+event.target.id).text(" like").css("color", "blue");
+
                 }
                 else{
-                    if(data.likes_of_post==0){
+                    if(likes==0){
 
-                        data.likes_of_post="";
+                        likes="";
                     }
-                    $("#"+event.target.id).text(" like "+data.likes_of_post).css("color","");
+                    $("#likes-"+postID+"-"+posterID).text("Likes "+likes);
+                    $("#"+event.target.id).text(" like").css("color", "");
+
                 }
+                
             },
             error:function(){
 
@@ -156,6 +159,44 @@ $(document).ready(function() {
         });
     });
 
+    $(".likes").mouseenter(function(event){
+        const postID = event.target.id.split("-")[1]
+
+        $("#likers-"+postID).toast("show");
+    });
+
+    $(".likers").mouseleave(function(event){
+        // const postID = event.target.id.split("-")[1]
+        // alert(event.target.id);
+        $(".likers").toast("hide");
+    });
+    
+    $(".comment").keypress(function(event) { 
+        if(event.keyCode === 13){
+
+            const [postID, posterID, commenterID]=event.target.id.split("-").slice(2,)
+            commentText = $("#"+event.target.id).val();
+            var commentData = {'post_id': postID, 'poster_id': posterID, 'commenter_id':commenterID, 'comment_text':commentText};
+            $.ajax({
+                headers:({'X-CSRFToken':getCookie("csrftoken")}),
+                method:'post',
+                url: window.location.href,
+                data:commentData,
+                success:function(data){
+                    // $("#comment-history-"+postID).append($("#user-icon-name").html()+data.new_comment);
+                    // $("#comment-history-"+postID).append($("#user-icon-name").html());
+
+                    $("#post-"+postID).before(
+                        "<div class='mt-2 ml-1'><a href="+"{% url 'profile' %}?"+currentUserID+'>'+data.first_name+" "+data.last_name+"</a> "+data.new_comment+"</div>");
+                    $("#"+event.target.id).val("");
+                },
+                error:function(){
+                    alert("Unable to comment");
+                }
+            });event.preventDefault();
+        }
+    });
+    
     $(".short-bio").click(function(event){
         alert(event.target.id);
 

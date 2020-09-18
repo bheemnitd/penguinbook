@@ -1,7 +1,11 @@
 {% extends 'penguinbook/header.html'%}
 {% load static %}
 {% block base%}
-
+    <script>
+        window.onload = function() {
+            currentUserID = document.getElementById("current-user-id").innerHTML;
+        };
+    </script>
     <!-- <div class="container-fluid" style="background-color: #ebedff"> -->
     <nav class="navbar navbar-expand-sm navbar-dark navbar-toggleable-md sticky-top">
         <div class="col-sm-4 d-flex justify-content-center">

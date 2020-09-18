@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, HttpResponse
 from .form import RegistrationForm, ProfileForm, PostForm, GenderAndDateOfBirthForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
-from penguinbook.models import Profile, Post, Friend, Message, Like
+from penguinbook.models import Profile, Post, Friend, Message, Like, Comment
 from django.contrib.auth.models import User
 from datetime import datetime as dt
 from django.http import JsonResponse
@@ -50,7 +50,12 @@ def index(request):
                 gender_dob_form.save()
                 username = authenticate(username=username, password=password)
                 login(request, username)
-                Post.objects.create(user_id=user.id, post_text="Penguinbook welcomes you :-)", likes=0)
+                user = User.objects.get(username=request.POST['username'])
+                user.profile.display_picture="/static/images/user.png"
+                user.profile.display_cover="static/images/default_display_cover.png"
+                user.save()
+                
+                Post.objects.create(user_id=user.id, post_text="Penguinbook welcomes you :-)")
                 return redirect('home')
                 
             # signup_form     = RegistrationForm()
@@ -138,20 +143,37 @@ def home(request):
         unknown_avatars = User.objects.exclude(id__in=friends).exclude(id=request.user.id)
 
         friends_post=Post.objects.exclude(user_id__in=unknown_avatars.values('id')).order_by('-id')
-
+        
         friends = User.objects.filter(id__in=friends)
         # SORT THE FRIENDS_POST ORDER BY POST_DATE SO WE CAN GET LATEST POST ON TOP.            
         # friends_post.sort(key=lambda r: r.post_date, reverse=True)
         
+        # post = Post.objects.filter(user_id=18)
+        # for p in post:
+        #     likes = Like.objects.filter(post_id=p.id)
+            # print("like of ",p,"is ",likes)
+            # print("likes:",likes)
+        friend_post = list()
+        for post in friends_post:
+            friend_post.append({'post':post,
+                                'likes':User.objects.filter(id__in=Like.objects.filter(post_id=post.id).values('user_id')),
+                                'comments':Comment.objects.filter(post_id=post.id).order_by("-comment_time").values('comment_text','user__first_name','user__last_name')
+                                })
+        
+        # likes = Like.objects.filter(post_id__in=friends_post.values('id'))
+        # for like in likes:
+        #     print("liked:",like.post_id)
+        #     break
         post_form = PostForm()
         return render(request, 'penguinbook/home.html', {'post_form'   :post_form,
                                                         #   'public_post' :public_post,
                                                         
-                                                        'friends_post':friends_post,
+                                                        'friends_post':friend_post,
                                                         'friends':friends,
                                                         'pending_received_friend_request':pending_received_friend_request,
                                                         'unknown_avatars':unknown_avatars, #PUBLIC PROFILES WHICH IS NOT FRIEND OF CURRENT USER.
                                                         'pending_sent_friend_request':pending_sent_friend_request,
+                                                        
                                                         })
     # post_form=PostForm(request.POST, request.FILES)
     print('request.POST:', request.POST)               
@@ -188,24 +210,39 @@ def home(request):
     elif 'like_status' in request.POST:
 
         # if 'liked' == request.POST['like_status']:
-        if Like.objects.filter(post_id=request.POST['post_id'], user_id=request.user.id):
-            Like.objects.filter(post_id=request.POST['post_id'], user_id=request.user.id).delete()
+        like_status = Like.objects.filter(post_id=request.POST['post_id'], user_id=request.user.id)
+        if like_status:
+            like_status.delete()
         else:
             Like.objects.create(user_id=request.user.id, 
                                 post_id=request.POST['post_id'], 
                                 like_gainer_id=request.POST['like_gainer_id'], 
                                 like_status=request.POST['like_status'])
+                                
             # Post.objects.filter(id=request.POST['post_id']).update(likes=F('likes')+1)
             # Post.objects.filter(id=request.POST['post_id']).update(likes=F('likes')-1)
 
-            print("working")
+        #     print("working")
 
-        # likes_of_post=Post.objects.get(id=request.POST['post_id']).likes
-        likes_of_post = Like.objects.filter(post_id=request.POST['post_id']).count()
-        Post.objects.filter(id=request.POST['post_id']).update(likes=likes_of_post)
-        return JsonResponse({'likes_of_post':likes_of_post})
+        # # likes_of_post=Post.objects.get(id=request.POST['post_id']).likes
+        # likes_of_post = Like.objects.filter(post_id=request.POST['post_id']).count()
+        # Post.objects.filter(id=request.POST['post_id']).update(likes=likes_of_post)
+        return JsonResponse({'update':'success'})
+    elif 'comment_text' in request.POST:
+        Comment.objects.create( post_id=request.POST['post_id'],
+                                user_id=request.POST['commenter_id'],
+                                comment_gainer_id=request.POST['poster_id'],
+                                comment_text=request.POST['comment_text'])
+        comments_of_post=Comment.objects.filter(post_id=request.POST['post_id'])
 
-        # return render(request)
+        # comments_of_post = serializers.serialize('json', comments_of_post)
+        # return HttpResponse(data, content_type="application/json")
+
+        return JsonResponse({'new_comment':request.POST['comment_text'],
+                            'first_name':request.user.first_name,
+                            'last_name':request.user.last_name
+                            })
+    # return render(request)
 
 @login_required
 def profile(request):

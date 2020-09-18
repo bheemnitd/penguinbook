@@ -30,21 +30,6 @@ def post_image_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
     filename = filename[:-4]+str(dt.now())+filename[-4:]
     return 'user_{0}/post_image/{1}'.format(instance.user.id, filename)
-
-class Post(models.Model):
-
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,)
-    post_text  = models.TextField(max_length=5000, blank=True)
-    post_image = models.ImageField(upload_to=post_image_directory_path, blank=True, max_length=1000)
-    post_date  = models.DateTimeField(auto_now=True)
-    likes = models.SmallIntegerField(default=0)
-
-    # def __str__(self):
-    #     return self.user.username
-    
-
-    # def __str__(self):
-    #     return self.author.author
 GENDER_CHOICES = ( 
 ("M", "Male"),
 ("F", "Female"),
@@ -102,7 +87,47 @@ class Friend(models.Model):
     def __str__(self):
         return self.user.username
 
+class Post(models.Model):
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,)
+    # comment = models.ForeignKey(Comment,on_delete=models.CASCADE, null=True)
+    # like    = models.ForeignKey(Like,   on_delete=models.CASCADE, null=True)
+
+    post_text  = models.TextField(max_length=5000, blank=True)
+    post_image = models.ImageField(upload_to=post_image_directory_path, blank=True, max_length=1000)
+    post_date  = models.DateTimeField(auto_now=True)
+    # likes = models.SmallIntegerField(default=0)
+
+
+    # def __str__(self):
+    #     return self.user.username
+    
+
+    # def __str__(self):
+    #     return self.author.author  
+
+class Like(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True)
+    like_status = models.CharField(null=True, max_length=10)
+    like_time = models.DateTimeField(default=timezone.now, db_index=True)
+    like_gainer_id = models.SmallIntegerField(null=True)
+
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    post = models.ForeignKey(Post,  on_delete=models.CASCADE, null=True)
+    # like = models.ForeignKey(Like, related_name='post_likes', on_delete=models.CASCADE, null=True)
+    comment_text = models.TextField(max_length=100000, null=True)
+    comment_gainer_id = models.SmallIntegerField(null=True)
+    comment_time = models.DateTimeField(default=timezone.now, db_index=True)
+# class Share(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+#     post = models.ForeignKey(Post,  on_delete=models.CASCADE, null=True)
+#     share_gainer_id=models.SmallIntegerField(null=True)
+#     share_time = models.DateTimeField(default=timezone.now, db_index=True)
+
 class Message(models.Model):
+
     user = models.ForeignKey(User, related_name='user_messages', on_delete=models.CASCADE, null=True)
     message_receiver_id = models.SmallIntegerField(null=True)
     message = models.TextField(max_length=100000, null=True)
@@ -111,14 +136,6 @@ class Message(models.Model):
 
     def last_10_messages(self):
         return Message.objects.order_by('-timestamp').all()[:10]
-        
-class Like(models.Model):
-    user = models.ForeignKey(User, related_name='user_likes', on_delete=models.CASCADE, null=True)
-    post = models.ForeignKey(Post, related_name='post_likes', on_delete=models.CASCADE, null=True)
-    like_status = models.CharField(null=True, max_length=10)
-    like_time = models.DateTimeField(default=timezone.now, db_index=True)
-    like_gainer_id = models.SmallIntegerField(null=True)
-
 # "<frozen importlib._bootstrap>"
 # class Room(models.Model):
 #     name = models.TextField(max_length=1000)
