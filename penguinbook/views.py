@@ -50,10 +50,6 @@ def index(request):
                 gender_dob_form.save()
                 username = authenticate(username=username, password=password)
                 login(request, username)
-                user = User.objects.get(username=request.POST['username'])
-                user.profile.display_picture="/static/images/user.png"
-                user.profile.display_cover="static/images/default_display_cover.png"
-                user.save()
                 
                 Post.objects.create(user_id=user.id, post_text="Penguinbook welcomes you :-)")
                 return redirect('home')
